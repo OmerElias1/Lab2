@@ -1,7 +1,18 @@
 import { useState } from 'react'
-import HomePage from './homepage'
 import './App.css'
 
+// 1. Simple HomePage Component
+function HomePage({ username, onLogout }) {
+  return (
+    <div className="homepage">
+      <h1>Dashboard</h1>
+      <p>Welcome, <strong>{username}</strong>! You are now logged in.</p>
+      <button onClick={onLogout}>Logout</button>
+    </div>
+  )
+}
+
+// 2. Main App Component
 export default function App() {
   const [username, setUserName] = useState("")
   const [password, setPassword] = useState("")
