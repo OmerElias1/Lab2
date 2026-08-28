@@ -20,16 +20,18 @@ export default function App() {
   }
 
   return (
-    <div className="container">
+    <>
       {currentUser ? (
         <HomePage user={currentUser} onLogout={handleLogout} />
       ) : (
-        <UserManagement
-          registeredUsers={registeredUsers}
-          onLogin={handleLogin}
-          onRegister={handleRegister}
-        />
+        <div className="auth-page-wrapper">
+          <UserManagement
+            registeredUsers={registeredUsers}
+            onLogin={handleLogin}
+            onRegister={handleRegister}
+          />
+        </div>
       )}
-    </div>
+    </>
   )
 }
