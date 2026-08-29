@@ -1,18 +1,37 @@
 import { useState } from 'react'
+import {
+  FaUser,
+  FaSignOutAlt,
+  FaThLarge,
+  FaFolderOpen,
+  FaChartLine,
+  FaCog,
+  FaShieldAlt,
+  FaServer,
+  FaTasks,
+  FaBars,
+  FaTimes
+} from 'react-icons/fa'
 
 export default function HomePage({ user, onLogout }) {
   const username = user?.username || 'User'
   const userId = user?.id ? `USR-${user.id.toString().slice(-6)}` : 'USR-948102'
   const [activeTab, setActiveTab] = useState('dashboard')
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [loginTime] = useState(() => new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }))
   const [loginDate] = useState(() => new Date().toLocaleDateString([], { month: 'short', day: 'numeric', year: 'numeric' }))
 
   const navItems = [
-    { id: 'dashboard', label: 'Dashboard' },
-    { id: 'projects', label: 'Projects' },
-    { id: 'analytics', label: 'Analytics' },
-    { id: 'settings', label: 'Settings' }
+    { id: 'dashboard', label: 'Dashboard', icon: <FaThLarge /> },
+    { id: 'projects', label: 'Projects', icon: <FaFolderOpen /> },
+    { id: 'analytics', label: 'Analytics', icon: <FaChartLine /> },
+    { id: 'settings', label: 'Settings', icon: <FaCog /> }
   ]
+
+  const handleTabSelect = (tabId) => {
+    setActiveTab(tabId)
+    setIsMobileMenuOpen(false)
+  }
 
   return (
     <div className="app-fullscreen">
@@ -25,33 +44,81 @@ export default function HomePage({ user, onLogout }) {
             <span className="version-badge">v2.0</span>
           </div>
 
-          <nav className="nav-links">
+          {/* Desktop Nav Links */}
+          <nav className="nav-links desktop-only">
             {navItems.map((item) => (
               <button
                 key={item.id}
                 className={`nav-link ${activeTab === item.id ? 'active' : ''}`}
-                onClick={() => setActiveTab(item.id)}
+                onClick={() => handleTabSelect(item.id)}
               >
+                <span>{item.icon}</span>
                 <span>{item.label}</span>
               </button>
             ))}
           </nav>
 
           <div className="nav-actions">
-            <div className="user-profile-pill">
+            <div className="user-profile-pill desktop-only">
               <div className="nav-avatar">
-                {username.charAt(0).toUpperCase()}
+                <FaUser size={13} />
               </div>
               <div className="user-text-meta">
                 <span className="nav-username">{username}</span>
                 <span className="nav-user-status">Online</span>
               </div>
             </div>
-            <button onClick={onLogout} className="navbar-logout-btn" title="Sign out">
+            <button onClick={onLogout} className="navbar-logout-btn desktop-only" title="Sign out">
+              <FaSignOutAlt size={13} />
               <span>Logout</span>
+            </button>
+
+            {/* Mobile Hamburger Button */}
+            <button
+              className="hamburger-btn"
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              aria-label="Toggle navigation menu"
+              aria-expanded={isMobileMenuOpen}
+            >
+              {isMobileMenuOpen ? <FaTimes size={18} /> : <FaBars size={18} />}
             </button>
           </div>
         </div>
+
+        {/* Mobile Dropdown Menu */}
+        {isMobileMenuOpen && (
+          <div className="mobile-menu-drawer">
+            <div className="mobile-user-profile">
+              <div className="nav-avatar">
+                <FaUser size={14} />
+              </div>
+              <div className="user-text-meta">
+                <span className="nav-username">{username}</span>
+                <span className="nav-user-status">Online • {userId}</span>
+              </div>
+            </div>
+
+            <nav className="mobile-nav-links">
+              {navItems.map((item) => (
+                <button
+                  key={item.id}
+                  className={`mobile-nav-link ${activeTab === item.id ? 'active' : ''}`}
+                  onClick={() => handleTabSelect(item.id)}
+                >
+                  <span className="mobile-nav-icon">{item.icon}</span>
+                  <span>{item.label}</span>
+                </button>
+              ))}
+            </nav>
+
+            <div className="mobile-menu-footer">
+              <button onClick={onLogout} className="mobile-logout-btn">
+                <FaSignOutAlt size={14} />
+                <span>Logout</span>
+              </button>
+            </div>
+          </div>
+        )}
       </header>
 
       {/* Main Full-Screen Content */}
@@ -74,6 +141,7 @@ export default function HomePage({ user, onLogout }) {
               <div className="stat-box">
                 <div className="stat-box-header">
                   <span className="stat-box-title">Active Projects</span>
+                  <FaFolderOpen size={16} color="rgba(255,255,255,0.7)" />
                 </div>
                 <div className="stat-box-num">12</div>
                 <div className="stat-box-footer text-green">+2 new this week</div>
@@ -82,6 +150,7 @@ export default function HomePage({ user, onLogout }) {
               <div className="stat-box">
                 <div className="stat-box-header">
                   <span className="stat-box-title">System Status</span>
+                  <FaServer size={16} color="rgba(255,255,255,0.7)" />
                 </div>
                 <div className="stat-box-num">Optimal</div>
                 <div className="stat-box-footer text-blue">99.9% Uptime</div>
@@ -90,6 +159,7 @@ export default function HomePage({ user, onLogout }) {
               <div className="stat-box">
                 <div className="stat-box-header">
                   <span className="stat-box-title">Security Status</span>
+                  <FaShieldAlt size={16} color="rgba(255,255,255,0.7)" />
                 </div>
                 <div className="stat-box-num">Protected</div>
                 <div className="stat-box-footer text-green">2FA Enabled</div>
@@ -98,6 +168,7 @@ export default function HomePage({ user, onLogout }) {
               <div className="stat-box">
                 <div className="stat-box-header">
                   <span className="stat-box-title">Tasks Completed</span>
+                  <FaTasks size={16} color="rgba(255,255,255,0.7)" />
                 </div>
                 <div className="stat-box-num">28 / 32</div>
                 <div className="stat-box-footer text-purple">87.5% completion</div>
