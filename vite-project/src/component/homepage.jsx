@@ -12,6 +12,7 @@ import {
   FaBars,
   FaTimes
 } from 'react-icons/fa'
+import { DemoFunction } from '../api.jsx'
 
 export default function HomePage({ user, onLogout }) {
   const username = user?.username || 'User'
@@ -262,6 +263,13 @@ export default function HomePage({ user, onLogout }) {
                       </div>
                     </div>
                   </div>
+                </div>
+
+                <div className="card-panel">
+                  <div className="card-panel-header">
+                    <h3>API Posts</h3>
+                  </div>
+                  <DemoFunction />
                 </div>
               </div>
             </div>
